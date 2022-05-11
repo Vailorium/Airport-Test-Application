@@ -2,11 +2,11 @@ CREATE USER administrator;
 CREATE DATABASE flights;
 GRANT ALL PRIVILEGES ON DATABASE flights TO administrator;
 \c flights
-CREATE TABLE IF NOT EXISTS potato (
-  ID SERIAL PRIMARY KEY,
-  name VARCHAR(30),
-  email VARCHAR(30)
+CREATE TABLE IF NOT EXISTS users (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  display_name VARCHAR(50) NOT NULL,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  password VARCHAR(100) NOT NULL,
+  salt VARCHAR(50) NOT NULL,
+  CONSTRAINT pk_user PRIMARY KEY (id)
 );
-
-INSERT INTO potato (name, email)
-  VALUES ('Jerry', 'jerry@example.com'), ('George', 'george@example.com');
