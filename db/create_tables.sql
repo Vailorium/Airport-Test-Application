@@ -17,3 +17,15 @@ CREATE TABLE IF NOT EXISTS planes (
   name VARCHAR(50) NOT NULL,
   CONSTRAINT pk_plane PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS flights (
+  id INT GENERATED ALWAYS AS IDENTITY,
+  flight_route VARCHAR(100) NOT NULL,
+  departure_time TIMESTAMP NOT NULL,
+  arrival_time TIMESTAMP NOT NULL,
+  price INT NOT NULL,
+  plane_id INT NOT NULL,
+  CONSTRAINT fk_flights_planes
+    FOREIGN KEY (plane_id)
+      REFERENCES planes(id)
+);
