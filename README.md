@@ -8,7 +8,7 @@ Author: `20000346`
 
 ### Start
 
-Use: `docker compose up -d` to start
+Use: `docker compose up -d --build` to start
 
 ### Stop
 
