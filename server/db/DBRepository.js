@@ -54,7 +54,6 @@ class DBRepository {
    */
   async register(displayName, username, password, salt) {
     var result;
-    console.log(displayName, username, password, salt);
     try{
       result = await this.pool.query('INSERT INTO users (display_name, username, password, salt) VALUES ($1, $2, $3, $4) RETURNING id, display_name', [
         displayName,

@@ -6,8 +6,8 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
 const loginSchema = yup.object().shape({
-  username: yup.string().required(),
-  password: yup.string().required(),
+  username: yup.string().required('Username is required'),
+  password: yup.string().required('Password is required'),
 });
 
 function LoginForm(props){
@@ -20,7 +20,6 @@ function LoginForm(props){
     validationSchema={loginSchema}
     onSubmit={async (values) => {
       const loggedIn = await handleLogin(values);
-      console.log(loggedIn);
       if(loggedIn && modalHide) {
         modalHide();
       } else {
@@ -42,7 +41,7 @@ function LoginForm(props){
       errors,
     }) => (
       <>
-        <Form noValidate onSubmit={handleSubmit} className="mb-4">
+        <Form noValidate onSubmit={handleSubmit} className="d-flex flex-column mb-4">
           <div className="mb-4">
             <Form.Label>Username</Form.Label>
             <Form.Control
@@ -50,7 +49,6 @@ function LoginForm(props){
               name="username"
               value={values.username}
               onChange={handleChange}
-              isValid={touched.username && !errors.username}
               isInvalid={!!errors.username}
             />
             <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
@@ -60,18 +58,22 @@ function LoginForm(props){
               name="password"
               value={values.password}
               onChange={handleChange}
-              isValid={touched.password && !errors.password}
               isInvalid={!!errors.password}
             />
             <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
           </div>
-          <Button variant="primary" type="submit">
+          <Button
+            className="w-50 align-self-center"
+            disabled={values.username === '' || values.password === '' || !isValid}
+            variant="primary"
+            type="submit"
+          >
             Login
           </Button>
         </Form>
         {
           errorMessage
-          && <Alert variant='error'>
+          && <Alert variant='danger'>
             {errorMessage}
           </Alert>
         }

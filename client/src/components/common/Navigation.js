@@ -25,22 +25,30 @@ function Navigation(props) {
     <>
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand href="/">Brand Name here!!!</Navbar.Brand>
+          <Navbar.Brand href="/">Dairy Flat Flights</Navbar.Brand>
           <Navbar.Toggle aria-controls="main-navbar-collapse" />
           <Navbar.Collapse id="main-navbar-collapse">
             <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="#">My Bookings</Nav.Link> { /* hide if user not logged in */ }
-              <Nav.Link href="#">Available Flights</Nav.Link>
+              {
+                // only display these options if the user is logged in
+                userProfile.displayName && (
+                  <>
+                    <Nav.Link href="#">My Bookings</Nav.Link>
+                    <Nav.Link href="#">Available Flights</Nav.Link>
+                  </>
+                )
+              }
             </Nav>
             {
+              // Display user details if logged in, otherwise display login/register buttons
               userProfile.displayName ? (
                 <div className="ms-auto align-middle">
                   Hello {userProfile.displayName}!
                 </div>
               ) : (
                 <div className="ms-auto">
-                  <Button variant="outline-primary" onClick={handleShowLogin}>Login</Button>
+                  <Button className="me-2" variant="outline-primary" onClick={handleShowLogin}>Login</Button>
                   <Button variant="outline-primary" onClick={handleShowRegister}>Register</Button>
                 </div>
               )

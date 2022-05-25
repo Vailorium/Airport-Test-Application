@@ -6,9 +6,9 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
 const registerSchema = yup.object().shape({
-  displayName: yup.string().required(),
-  username: yup.string().required(),
-  password: yup.string().required().min(8, 'Password must contain atleast 8 characters'),
+  displayName: yup.string().required('Display Name is required').max(50, "Display Name cannot contain more than 50 characters"),
+  username: yup.string().required('Username is required').max(50, "Username cannot contain more than 50 characters"),
+  password: yup.string().required('Password is required').min(8, 'Password must contain atleast 8 characters'),
 });
 
 function RegisterForm(props){
@@ -43,9 +43,9 @@ function RegisterForm(props){
       errors,
     }) => (
       <>
-        <Form noValidate onSubmit={handleSubmit} className="mb-4">
+        <Form noValidate onSubmit={handleSubmit} className="d-flex flex-column mb-4">
           <div className="mb-4">
-            <Form.Label>Display Username</Form.Label>
+            <Form.Label>Display Name</Form.Label>
             <Form.Control
               type="text"
               name="displayName"
@@ -76,7 +76,12 @@ function RegisterForm(props){
             />
             <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
           </div>
-          <Button variant="primary" type="submit">
+          <Button
+            className="w-50 align-self-center"
+            disabled={values.username === '' || values.password === '' || values.displayName === '' || !isValid}
+            variant="primary"
+            type="submit"
+          >
             Register
           </Button>
         </Form>
