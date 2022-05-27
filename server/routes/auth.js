@@ -22,16 +22,15 @@ router.post('/login', async (req, res, next) => {
     }
 
     // hash + salt password using salt retrieved from db
-    crypto.pbkdf2(password, result.salt, 310000, 32, 'sha256', function(err, hashedPassword) {
+    crypto.pbkdf2(password, Buffer.from(result.salt, 'hex'), 310000, 32, 'sha256', function(err, hashedPassword) {
 
       // server error (crypto function failed)
       if(err) {
         console.error(err);
         return res.status(500).send();
       }
-
       // if hashes aren't equal, password is incorrect
-      if(!crypto.timingSafeEqual(result.password, hashedPassword)) {
+      if(result.password !== hashedPassword.toString('hex')) {
         return res.status(401).json({ message: 'Incorrect username or password.' });
       }
 
@@ -62,7 +61,7 @@ router.post('/register', async function(req, res, next) {
     }
 
     try{
-      const result = await db.register(req.body.displayName, req.body.username, hashedPassword, salt);
+      const result = await db.register(req.body.displayName, req.body.username, hashedPassword.toString('hex'), salt.toString('hex'));
 
       // all data is correct, create access token
       const token = issueJWT(result);

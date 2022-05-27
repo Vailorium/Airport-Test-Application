@@ -6,8 +6,8 @@ const { Pool } = require('pg');
  * @property {int} id
  * @property {string} display_name
  * @property {string} username
- * @property {Buffer} password
- * @property {Buffer} salt
+ * @property {string} password
+ * @property {string} salt
  */
 class DBRepository {
   constructor() {
@@ -48,8 +48,8 @@ class DBRepository {
    * Registers user in database
    * @param {string} displayName User's (visible) display name
    * @param {string} username User's unique username
-   * @param {Buffer} password User's hashed password
-   * @param {Buffer} salt User's salt
+   * @param {string} password User's hashed password
+   * @param {string} salt User's salt
    * @returns User id and display name
    */
   async register(displayName, username, password, salt) {
