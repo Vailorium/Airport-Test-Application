@@ -6,10 +6,12 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import { Link } from 'react-router-dom';
+import UserStore from '../../stores/UserStore';
 
 function Navigation(props) {
 
-  const { handleLogin, handleRegister, userProfile } = props;
+  const userProfile = UserStore.getUser();
   
   const [ showLogin, setShowLogin ] = useState(false);
 
@@ -23,7 +25,7 @@ function Navigation(props) {
 
   return (
     <>
-      <Navbar bg="light" expand="lg">
+      <Navbar bg="light" expand="lg" className="mb-4">
         <Container>
           <Navbar.Brand href="/">Dairy Flat Flights</Navbar.Brand>
           <Navbar.Toggle aria-controls="main-navbar-collapse" />
@@ -35,7 +37,7 @@ function Navigation(props) {
                 userProfile.displayName && (
                   <>
                     <Nav.Link href="#">My Bookings</Nav.Link>
-                    <Nav.Link href="#">Available Flights</Nav.Link>
+                    <Link to="flights" className='nav-link'>Available Flights</Link>
                   </>
                 )
               }
@@ -62,7 +64,7 @@ function Navigation(props) {
           <Modal.Title>Login</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <LoginForm handleLogin={handleLogin} modalHide={handleCloseLogin} />
+          <LoginForm modalHide={handleCloseLogin} />
         </Modal.Body>
       </Modal>
 
@@ -71,7 +73,7 @@ function Navigation(props) {
           <Modal.Title>Register</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <RegisterForm handleRegister={handleRegister} modalHide={handleCloseRegister} />
+          <RegisterForm modalHide={handleCloseRegister} />
         </Modal.Body>
       </Modal>
     </>

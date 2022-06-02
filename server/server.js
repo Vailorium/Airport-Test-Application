@@ -5,8 +5,11 @@ const passport = require('passport');
 const app = express();
 const port = 8080;
 
-const auth = require('./routes/auth');
 const bodyParser = require('body-parser');
+
+/* import routes */
+const auth = require('./routes/auth');
+const flights = require('./routes/flights');
 
 // parse provided cookies
 app.use(cookieParser());
@@ -39,6 +42,7 @@ app.use(function(req, res, next) {
 
 // API routes
 app.use('/', auth);
+app.use('/', flights);
 // http://www.gcmap.com/map?P=YSSY+-NZNE&MS=wls&MR=120&MX=720x360&PM=*
 
 app.listen(port, () => {
