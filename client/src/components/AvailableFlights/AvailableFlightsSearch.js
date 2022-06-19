@@ -33,7 +33,6 @@ class AvailableFlightsSearch extends React.Component {
       <Formik
         validationSchema={flightSearchSchema}
         onSubmit={async (values) => {
-          console.log(values);
           const from = values.departureLocation;
           const to = values.arrivalLocation;
           let start, end;
