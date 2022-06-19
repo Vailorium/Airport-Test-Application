@@ -14,6 +14,27 @@ class FlightStore {
       availableFlightsLoading: false,
       availableFlights: [],
     }
+
+    this.timezones = {
+      "NZNE": "Pacific/Auckland",
+      "NZTL": "Pacific/Auckland",
+      "NZGB": "Pacific/Auckland",
+      "NZRO": "Pacific/Auckland",
+      "YSSY": "Australia/Sydney",
+      "NZCI": "Pacific/Chatham",
+    };
+  }
+
+  /**
+   * 
+   * @param {string} airportCode 4 character airport code
+   * @returns Timezone string (e.g. Pacific/Auckland) if found, null if not found (will default date to local timezone) 
+   */
+  getTimezoneByAirportCode(airportCode) {
+    const timezone = this.timezones[airportCode];
+
+    // if couldn't find airport, send null (will cause date to default to local timezone)
+    return timezone ? timezone : null;
   }
 
   /**

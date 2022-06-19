@@ -118,8 +118,8 @@ BEGIN
 
   IF NOT EXISTS (SELECT 1 FROM routes) THEN
     INSERT INTO routes(flight_id, departure_location, arrival_location, departure_time, arrival_time, price)
-    VALUES (1, 'NZNE', 'NZRO', '2022-05-31 22:30:00+12', '2022-05-31 23:00:00', 5000),
-      (1, 'NZRO', 'YSSY', '2022-05-31 23:15:00+12', '2022-06-01 02:30:00+12', 15000);
+    VALUES (1, 'NZNE', 'NZRO', '2022-06-30 22:30:00+12', '2022-06-30 23:00:00', 5000),
+      (1, 'NZRO', 'YSSY', '2022-06-30 23:15:00+12', '2022-07-01 02:30:00+12', 15000);
   END IF;
 END;
 $do$

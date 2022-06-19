@@ -105,7 +105,7 @@ class DBRepository {
     try {
       const query = `
       WITH x AS (
-      SELECT * FROM available_flights_table WHERE departure_location = $1 AND departure_time < now()
+      SELECT * FROM available_flights_table WHERE departure_location = $1 AND departure_time > now()
       ), y AS (
         SELECT * FROM available_flights_table WHERE arrival_location = $2 AND arrival_time >= $3 AND arrival_time <= $4
       ), z AS (
@@ -140,6 +140,51 @@ class DBRepository {
       throw e;
     }
     return result.rows;
+  }
+
+  /**
+   * 
+   * @param {number} routeId 
+   * @returns {number}
+   */
+  async getRouteSeats(routeId) {
+    var result;
+    try {
+      const query = `
+      SELECT planes.seats as plane_capacity, COUNT(bookings.id) as taken_seats
+      FROM routes
+      INNER JOIN flights ON flights.id = routes.flight_id
+      INNER JOIN planes ON planes.id = flights.plane_id
+      LEFT JOIN bookings ON bookings.route_id = routes.id
+      WHERE routes.id=$1
+      GROUP BY planes.seats
+      `;
+      result = await this.pool.query(query, [routeId])
+    } catch(e) {
+      throw e;
+    }
+    console.log(result);
+    if(result.rows.length == 0) {
+      throw new Error('Invalid route ID');
+    }
+    return result.rows[0].plane_capacity - result.rows[0].taken_seats;
+  }
+
+  /**
+   * 
+   * @param {number} userId 
+   * @param {number} routeId 
+   * @param {number} seatCount Seats to book
+   */
+  async bookRouteSeats(userId, routeId, seatCount) {
+    for(let i = 0; i < seatCount; i++) {
+      var result;
+      try {
+        result = await this.pool.query('INSERT INTO bookings (user_id, route_id) VALUES($1, $2)', [userId, routeId])
+      } catch(e) {
+        throw e;
+      }
+    }
   }
 }
 module.exports = new DBRepository();

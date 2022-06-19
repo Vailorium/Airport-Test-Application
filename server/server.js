@@ -43,7 +43,6 @@ app.use(function(req, res, next) {
 // API routes
 app.use('/', auth);
 app.use('/', flights);
-// http://www.gcmap.com/map?P=YSSY+-NZNE&MS=wls&MR=120&MX=720x360&PM=*
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
