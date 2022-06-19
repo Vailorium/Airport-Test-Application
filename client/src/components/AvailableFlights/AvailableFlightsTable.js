@@ -27,9 +27,13 @@ function AvailableFlightsTable(props) {
               <td>{flight.flightId}</td>
               <td>{flight.planeName}</td>
               <td>{flight.routes[0].departureLocationFull}</td>
-              <td>{new Date(flight.routes[0].departureTime).toLocaleString(undefined, { timeZoneName: 'short' })}</td>
+              <td>{new Date(flight.routes[0].departureTime).toLocaleString(
+                undefined, { timeZoneName: 'short', timeZone: FlightStore.getTimezoneByAirportCode(flight.routes[0].departureLocation)}
+              )}</td>
               <td>{flight.routes[flight.routes.length - 1].arrivalLocationFull}</td>
-              <td>{new Date(flight.routes[flight.routes.length - 1].arrivalTime).toLocaleString(undefined, { timeZoneName: 'short' })}</td>
+              <td>{new Date(flight.routes[flight.routes.length - 1].arrivalTime).toLocaleString(
+                undefined, { timeZoneName: 'short', timeZone: FlightStore.getTimezoneByAirportCode(flight.routes[flight.routes.length - 1].arrivalLocation)}
+              )}</td>
               <td>${(flight.routes.map((r) => r.price).reduce((prev, curr) => prev + curr) / 100).toFixed(2)} NZD</td>
               <td>{flight.planeCapacity - Math.max(...flight.routes.map((r) => r.seats))}</td>
               <td>
