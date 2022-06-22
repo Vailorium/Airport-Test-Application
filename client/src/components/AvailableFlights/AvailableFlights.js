@@ -29,6 +29,7 @@ class AvailableFlights extends React.Component {
   }
 
   updateTable() {
+    // pass to children to allow them to update parent
     this.forceUpdate();
   }
 

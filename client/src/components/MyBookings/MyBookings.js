@@ -25,6 +25,7 @@ class MyBookings extends React.Component {
   }
   
   toggleAllBookings(bookings, checked) {
+    // toggle all bookings provided given the checked provided (turns all selected bookings on or off)
     if(checked) {
       for(let booking of bookings) {
         this.addBooking(booking.bookingId);
@@ -40,6 +41,7 @@ class MyBookings extends React.Component {
   }
 
   toggleBooking(bookingId) {
+    // turn booking on/of
     const index = this.state.selectedBookings.indexOf(bookingId);
     if(index > -1) {
       this.removeBooking(index);
@@ -49,12 +51,14 @@ class MyBookings extends React.Component {
   }
 
   addBooking(bookingId) {
+    // since state is immuntable, assign new array to push then set state
     const newArray = this.state.selectedBookings;
     newArray.push(bookingId);
     this.setState({selectedBookings: newArray});
   }
 
   removeBooking(index) {
+    // since state is immutable, assign new array to splice then set state
     const newArray = this.state.selectedBookings;
     newArray.splice(index, 1);
     this.setState({selectedBookings: newArray});
@@ -71,6 +75,7 @@ class MyBookings extends React.Component {
         });
     }
 
+    // after deleting bookings from server, remove bookings from state
     while(this.state.selectedBookings.length > 0) {
       const bookingId = this.state.selectedBookings[0];
       const index = this.state.selectedBookings.indexOf(bookingId);
@@ -78,6 +83,8 @@ class MyBookings extends React.Component {
         this.removeBooking(index);
       }
     }
+
+    // reload bookings table
     await FlightStore.loadMyBookings();
     this.forceUpdate();
   }

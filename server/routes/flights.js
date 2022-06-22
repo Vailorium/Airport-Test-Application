@@ -72,18 +72,18 @@ const flightsBodySchema = Joi.object({
 router.post('/flights', passport.authenticate('jwt', { session: false}), validator.body(flightsBodySchema), async (req, res, next) => {
   const user = await req.user;
 
-  console.log('logged!');
-
+  // ensure user is admin (user cannot spoof this, it is attached to their passport)
   if(user.id_admin === false) {
     return res.status(401).send();
   }
 
   const flightData = req.body;
+
+  // add flight, get returned id
   const flightId = await db.addFlight(flightData.planeId);
 
-  console.log(flightId);
-
   for(let i = 0; i < flightData.routes.length;i ++) {
+    // add all routes, use flightId as reference
     db.addRoute(flightId, flightData.routes[i]);
   }
 

@@ -13,7 +13,9 @@ const bookBodySchema = Joi.object({
 router.post('/book', passport.authenticate('jwt', { session: false }), validator.body(bookBodySchema), async (req, res, next) => {
   const { routes, count } = req.body;
   const user = await req.user;
+
   for(let route of routes) {
+    // check that route has enough seats for booking
     const availableSeats = await db.getRouteSeats(route);
     if(availableSeats < count) {
       res.status(400).send({message: 'Seats already booked'});
@@ -21,6 +23,7 @@ router.post('/book', passport.authenticate('jwt', { session: false }), validator
     }
   }
   for(let route of routes) {
+    // book seats for route
     db.bookRouteSeats(user.id, route, count);
   }
   res.status(200).send({message: 'Success'});
@@ -28,11 +31,12 @@ router.post('/book', passport.authenticate('jwt', { session: false }), validator
 
 router.get('/bookings', passport.authenticate('jwt', { session: false}), async (req, res, next) => {
   const user = await req.user;
+
+  // get user raw bookings data
   const rawBookings = await db.getUserBookings(user.id);
   const flightsData = [];
   let currentFlightId = -1;
   for(let i = 0; i < rawBookings.length; i++) {
-    console.log(rawBookings[i]);
     const currentRoute = rawBookings[i];
     // if new flight needs to be added, add new object into array
     if(currentRoute.flight_id !== currentFlightId) {
@@ -72,6 +76,7 @@ router.delete('/bookings/:id', passport.authenticate('jwt', { session: false}), 
   if(result) {
     res.status(200).end();
   } else {
+    // failed for some reason (booking didn't exist in the first place?)
     res.status(400).end();
   }
 });

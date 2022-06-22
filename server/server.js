@@ -29,7 +29,7 @@ require('./config/passport')(passport);
 // init passport
 app.use(passport.initialize());
 
-//! might not need this
+//! might not need this keeping it anyway
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -47,6 +47,7 @@ app.use('/auth/', auth);
 app.use('/flight/', flights);
 app.use('/booking/', bookings);
 
+// static pages
 app.use(express.static(path.join(__dirname, "../client", "build")));
 app.use(express.static("public"));
 app.use((req, res, next) => {
@@ -54,5 +55,5 @@ app.use((req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`App listening on port ${port}`)
 });

@@ -11,6 +11,14 @@ const { Pool } = require('pg');
  */
 
 /**
+ * @typedef DBPlane
+ * @type {object}
+ * @property {int} id
+ * @property {string} name
+ * @property {int} seats
+ */
+
+/**
  * @typedef DBAvailableFlight
  * @type {object}
  * @property {int} flight_id
@@ -25,6 +33,33 @@ const { Pool } = require('pg');
  * @property {string} departure_location_full
  * @property {string} arrival_location_full
  * @property {int} seats
+ */
+
+/**
+ * @typedef DBMyBooking
+ * @type {object}
+ * @property {int} flight_id
+ * @property {string} name
+ * @property {int} seats
+ * @property {int} route_id
+ * @property {string} departure_location
+ * @property {Date} departure_time
+ * @property {string} arrival_location
+ * @property {Date} arrival_time
+ * @property {int} price
+ * @property {string} departure_location_full
+ * @property {string} arrival_location_full
+ * @property {int} booking_id
+ */
+
+/**
+ * @typedef UserRoute
+ * @type {object}
+ * @property {string} departureLocation
+ * @property {string} arrivalLocation
+ * @property {string} departureTime
+ * @property {string} arrivalTime
+ * @property {number} price
  */
 
 /**
@@ -79,7 +114,7 @@ class DBRepository {
   async register(displayName, username, password, salt) {
     var result;
     try{
-      result = await this.pool.query('INSERT INTO users (display_name, username, password, salt) VALUES ($1, $2, $3, $4) RETURNING id, display_name', [
+      result = await this.pool.query('INSERT INTO users (display_name, username, is_admin, password, salt) VALUES ($1, $2, FALSE, $3, $4) RETURNING id, display_name', [
         displayName,
         username,
         password,
@@ -129,7 +164,7 @@ class DBRepository {
   }
 
   /**
-   * 
+   * Gets all airports
    * @returns {DBAirport[]}
    */
   async getAirports() {
@@ -143,7 +178,7 @@ class DBRepository {
   }
 
   /**
-   * 
+   * Gets the total capacity of the plane minus the number of taken seats for a given route
    * @param {number} routeId 
    * @returns {number}
    */
@@ -171,7 +206,7 @@ class DBRepository {
   }
 
   /**
-   * 
+   * Books route for a user seatCount times
    * @param {number} userId 
    * @param {number} routeId 
    * @param {number} seatCount Seats to book
@@ -187,6 +222,11 @@ class DBRepository {
     }
   }
 
+  /**
+   * Gets all routes user has booked
+   * @param {number} userId 
+   * @returns {DBMyBooking[]}
+   */
   async getUserBookings(userId) {
     const query = `
     SELECT
@@ -216,6 +256,12 @@ class DBRepository {
     return result.rows;
   }
 
+  /**
+   * Deletes user booking
+   * @param {number} userId 
+   * @param {number} bookingId 
+   * @returns {boolean} true if successfully deleted, false otherwise
+   */
   async deleteUserBooking(userId, bookingId) {
     let result;
     try {
@@ -226,6 +272,10 @@ class DBRepository {
     return result.rows.length > 0;
   }
 
+  /**
+   * Gets all planes
+   * @returns {DBPlane[]}
+   */
   async getPlanes() {
     let result;
     try {
@@ -236,6 +286,11 @@ class DBRepository {
     return result.rows;
   }
 
+  /**
+   * Add flight to database
+   * @param {number} planeId 
+   * @returns {number} Generated flightId
+   */
   async addFlight(planeId) {
     let result;
     try {
@@ -246,6 +301,11 @@ class DBRepository {
     return result.rows[0].id;
   }
 
+  /**
+   * 
+   * @param {number} flightId Generated flightId from addFlight
+   * @param {UserRoute} route Submitted route data
+   */
   async addRoute(flightId, route) {
     let result;
     const query = `

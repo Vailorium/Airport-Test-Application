@@ -9,6 +9,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { faSearch, faTrash, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 
+// load icons
 library.add(fab, faSearch);
 library.add(fab, faTrash);
 library.add(fab, faTrashAlt);
