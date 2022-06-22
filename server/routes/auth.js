@@ -69,7 +69,7 @@ router.post('/register', async function(req, res, next) {
       // send token as cookie, send user profile as raw
       return res
         .status(200)
-        .cookie('flights-jwt', token, { maxAge: (1000 * 60 * 60 * 24), httpOnly: false })
+        .cookie('flights-jwt', token, { maxAge: (1000 * 60 * 60 * 24), httpOnly: true })
         .json({ message: "success", user: getUserProfile(result)});
     } catch(e) {
       // database error
@@ -87,7 +87,7 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), async (
 
 router.get('/logout', async (req, res, next) => {
   return res.status(200)
-    .clearCookie('flights-jwt', { maxAge: 0, httpOnly: false })
+    .clearCookie('flights-jwt')
     .send();
 })
 

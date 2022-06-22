@@ -15,10 +15,11 @@ class UserStore {
   }
 
   async logoutUser() {
-    await axios.get(`${process.env.REACT_APP_API_URL}/logout`)
+    await axios.get(`/auth/logout`)
       .then((res) => {
         if(res.status === 200) {
-          // window.location = '/';
+          this.setUser({ displayName: '' });
+          window.location = '/';
         }
       });
   }
