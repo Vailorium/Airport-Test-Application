@@ -3,7 +3,8 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const passport = require('passport');
 const app = express();
-const port = 8080;
+const port = 8000;
+const path = require('path');
 
 const bodyParser = require('body-parser');
 
@@ -42,9 +43,15 @@ app.use(function(req, res, next) {
 });
 
 // API routes
-app.use('/', auth);
-app.use('/', flights);
-app.use('/', bookings);
+app.use('/auth/', auth);
+app.use('/flight/', flights);
+app.use('/booking/', bookings);
+
+app.use(express.static(path.join(__dirname, "../client", "build")));
+app.use(express.static("public"));
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

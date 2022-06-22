@@ -31,7 +31,7 @@ class BookFlightForm extends React.Component {
       routes: flight.routes.map((r) => r.routeId),
       count: values.seatCount,
     };
-    return new Promise((resolve) => axios.post(`${process.env.REACT_APP_API_URL}/book`, data, { withCredentials: true })
+    return new Promise((resolve) => axios.post(`/booking/book`, data, { withCredentials: true })
       .then((res) => {
         if(res.status === 200) {
           resolve(true);
