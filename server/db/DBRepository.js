@@ -119,7 +119,7 @@ class DBRepository {
       FROM available_flights_table
       INNER JOIN z ON available_flights_table.flight_id = z.flight_id
       WHERE available_flights_table.route_id >= z.dep_id AND available_flights_table.route_id <= z.arr_id
-      ORDER BY flight_id, route_id;
+      ORDER BY departure_time, flight_id, route_id;
       `
       result = await this.pool.query(query, [departureLocation, arrivalLocation, dateFrom, dateTo]);
     } catch(e) {
@@ -211,7 +211,7 @@ class DBRepository {
     try {
       result = await this.pool.query(query, [userId]);
     } catch(e) {
-      throw(e);
+      throw e;
     }
     return result.rows;
   }
@@ -221,9 +221,43 @@ class DBRepository {
     try {
       result = await this.pool.query('DELETE FROM bookings WHERE user_id=$1 AND id=$2 RETURNING id', [userId, bookingId]);
     } catch(e) {
-      throw(e);
+      throw e;
     }
     return result.rows.length > 0;
+  }
+
+  async getPlanes() {
+    let result;
+    try {
+      result = await this.pool.query('SELECT * FROM planes');
+    } catch(e) {
+      throw e;
+    }
+    return result.rows;
+  }
+
+  async addFlight(planeId) {
+    let result;
+    try {
+      result = await this.pool.query('INSERT INTO flights (plane_id) VALUES ($1) RETURNING id', [planeId]);
+    } catch (e) {
+      throw e;
+    }
+    return result.rows[0].id;
+  }
+
+  async addRoute(flightId, route) {
+    let result;
+    const query = `
+    INSERT INTO routes(flight_id, departure_location, arrival_location, departure_time, arrival_time, price)
+      VALUES ($1, $2, $3, $4, $5, $6)
+    `;
+    try {
+      result = await this.pool.query(query, [flightId, route.departureLocation, route.arrivalLocation, route.departureTime, route.arrivalTime, route.price]);
+    } catch(e) {
+      throw e;
+    }
+    return;
   }
 }
 module.exports = new DBRepository();

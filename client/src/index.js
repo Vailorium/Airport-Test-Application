@@ -7,10 +7,12 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faSearch, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faTrash, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 library.add(fab, faSearch);
 library.add(fab, faTrash);
+library.add(fab, faTrashAlt);
+library.add(fab, faPlus);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

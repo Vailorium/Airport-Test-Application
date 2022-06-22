@@ -11,6 +11,11 @@ router.get('/airports', async (req, res, next) => {
   res.status(200).send(result);
 });
 
+router.get('/planes', async (req, res, next) => {
+  const result = await db.getPlanes();
+  res.status(200).send(result);
+});
+
 const flightsQuerySchema = Joi.object({
   from: Joi.string().required('From is required').length(4, 'utf-8', 'From must be a 4 character airport code'),
   to: Joi.string().required('To is required').length(4, 'utf-8', 'To must be a 4 character airport code'),
@@ -52,5 +57,36 @@ router.get('/flights', validator.query(flightsQuerySchema), async (req, res, nex
   }
 
   res.status(200).send(flightsData);
+});
+
+const flightsBodySchema = Joi.object({
+  planeId: Joi.number(),
+  routes: Joi.array().items(Joi.object({
+    departureLocation: Joi.string().required('Departure Location is required').length(4, 'utf-8', 'From must be a 4 character airport code'),
+    arrivalLocation: Joi.string().required('Arrival Location is required').length(4, 'utf-8', 'To must be a 4 character airport code'),
+    departureTime: Joi.date().required('Departure Time is required'),
+    arrivalTime: Joi.date().required('Arrival Time is required'),
+    price: Joi.number().required('Price is required'),
+  })),
+});
+router.post('/flights', passport.authenticate('jwt', { session: false}), validator.body(flightsBodySchema), async (req, res, next) => {
+  const user = await req.user;
+
+  console.log('logged!');
+
+  if(user.id_admin === false) {
+    return res.status(401).send();
+  }
+
+  const flightData = req.body;
+  const flightId = await db.addFlight(flightData.planeId);
+
+  console.log(flightId);
+
+  for(let i = 0; i < flightData.routes.length;i ++) {
+    db.addRoute(flightId, flightData.routes[i]);
+  }
+
+  res.status(200).send();
 });
 module.exports = router;

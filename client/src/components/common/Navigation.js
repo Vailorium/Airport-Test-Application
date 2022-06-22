@@ -62,15 +62,13 @@ class Navigation extends React.Component {
                   // only display these options if the user is logged in
                   userProfile.displayName && (
                     <>
-                      <Nav.Link href="bookings">My Bookings</Nav.Link>
+                      <Link to="bookings" className='nav-link'>My Bookings</Link>
                       <Link to="flights" className='nav-link'>Available Flights</Link>
+                      { userProfile.isAdmin && <Link to="flights/add" className="nav-link">Add Flight (admin)</Link>}
                     </>
                   )
                 }
               </Nav>
-              {
-                userProfile.isAdmin && <p>Hi Admin!</p>
-              }
               {
                 // Display user details if logged in, otherwise display login/register buttons
                 userProfile.displayName ? (
