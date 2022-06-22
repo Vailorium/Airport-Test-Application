@@ -12,15 +12,25 @@ class UserStore {
         displayName: '',
       }
     }
+  }
 
-    this.preloadUser();
+  async logoutUser() {
+    await axios.get(`/auth/logout`)
+      .then((res) => {
+        if(res.status === 200) {
+          this.setUser({ displayName: '' });
+          window.location = '/';
+        }
+      });
   }
   
   async preloadUser() {
     if(!this.state.user.displayName) {
       await axios.get(`/auth/profile`, { withCredentials: true })
         .then((res) => {
-          if(res.status === 200) {
+          console.log(res);
+          if(res.status === 200 || res.status === 304) {
+            console.log('passed');
             this.setUser(res.data.user);
           } else {
             // redirect to login
