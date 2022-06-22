@@ -11,6 +11,8 @@ class FlightStore {
     this.state = {
       airportsLoading: false,
       airports: [],
+      planesLoading: false,
+      planes: [],
       availableFlightsLoading: false,
       availableFlights: [],
       myBookings: [],
@@ -120,6 +122,27 @@ class FlightStore {
 
   setMyBookings(bookings) {
     this.state.myBookings = bookings;
+  }
+
+  async loadPlanes() {
+    this.state.planesLoading = true;
+    await axios.get('/flight/planes', { withCredentials: true })
+      .then((res) => {
+        if(res.status === 200) {
+          this.setPlanes(res.data);
+        } else {
+          console.error(res);
+        }
+        this.state.planesLoading = false;
+      })
+  }
+
+  getPlanes() {
+    return this.state.planes;
+  }
+
+  setPlanes(planes) {
+    this.state.planes = planes;
   }
 }
 export default new FlightStore();
