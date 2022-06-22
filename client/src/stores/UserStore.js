@@ -4,12 +4,14 @@ const axios = require('axios').default;
  * @typedef User
  * @type {object}
  * @property {string} displayName User's public display name
+ * @property {boolean} isAdmin Is user an admin
  */
 class UserStore {
   constructor() {
     this.state = {
       user: {
         displayName: '',
+        isAdmin: false,
       }
     }
   }
@@ -18,7 +20,7 @@ class UserStore {
     await axios.get(`/auth/logout`)
       .then((res) => {
         if(res.status === 200) {
-          this.setUser({ displayName: '' });
+          this.setUser({ displayName: '', isAdmin: false });
           window.location = '/';
         }
       });
@@ -28,9 +30,7 @@ class UserStore {
     if(!this.state.user.displayName) {
       await axios.get(`/auth/profile`, { withCredentials: true })
         .then((res) => {
-          console.log(res);
           if(res.status === 200 || res.status === 304) {
-            console.log('passed');
             this.setUser(res.data.user);
           } else {
             // redirect to login

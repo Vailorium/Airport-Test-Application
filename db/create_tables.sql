@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   id INT GENERATED ALWAYS AS IDENTITY,
   display_name VARCHAR(50) NOT NULL,
   username VARCHAR(50) UNIQUE NOT NULL,
+  is_admin BOOLEAN NOT NULL,
   password VARCHAR(100) NOT NULL,
   salt VARCHAR(100) NOT NULL,
   CONSTRAINT pk_user PRIMARY KEY (id)
@@ -97,8 +98,9 @@ $do$
 BEGIN
 	IF NOT EXISTS (SELECT 1 FROM users) THEN
     /* username: test, password: asdfasdf */
-    INSERT INTO users (display_name, username, password, salt)
-    VALUES ('test', 'test', '8a333b2c806cb87fd21cd3db8bbb1746c1c2e400f72b1dfcae6b4ef84a32ee16', 'f94304f12e335d3e7e399538e947eab1');
+    INSERT INTO users (display_name, username, is_admin, password, salt)
+    VALUES ('test', 'test', FALSE, '8a333b2c806cb87fd21cd3db8bbb1746c1c2e400f72b1dfcae6b4ef84a32ee16', 'f94304f12e335d3e7e399538e947eab1'),
+    ('admin', 'admin', TRUE, '8a333b2c806cb87fd21cd3db8bbb1746c1c2e400f72b1dfcae6b4ef84a32ee16', 'f94304f12e335d3e7e399538e947eab1');
   END IF;
 
   IF NOT EXISTS (SELECT 1 FROM airports) THEN
