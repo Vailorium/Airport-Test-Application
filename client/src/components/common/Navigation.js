@@ -69,6 +69,9 @@ class Navigation extends React.Component {
                 }
               </Nav>
               {
+                userProfile.isAdmin && <p>Hi Admin!</p>
+              }
+              {
                 // Display user details if logged in, otherwise display login/register buttons
                 userProfile.displayName ? (
                   <NavDropdown title={`Hello ${userProfile.displayName}`} id="user-dropdown" className="ms-auto align-middle">

@@ -21,6 +21,7 @@ const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
 function getUserProfile(user) {
   return {
     displayName: user.display_name,
+    isAdmin: user.is_admin,
   }
 }
 
