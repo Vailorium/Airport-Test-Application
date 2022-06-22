@@ -13,6 +13,8 @@ class FlightStore {
       airports: [],
       availableFlightsLoading: false,
       availableFlights: [],
+      myBookings: [],
+      myBookingsLoading: false,
     }
 
     this.timezones = {
@@ -97,6 +99,27 @@ class FlightStore {
 
   async setAvailableFlights(flights) {
     this.state.availableFlights = flights;
+  }
+
+  async loadMyBookings() {
+    this.state.myBookingsLoading = true;
+    await axios.get(`${process.env.REACT_APP_API_URL}/bookings`, { withCredentials: true })
+      .then((res) => {
+        if(res.status === 200) {
+          this.setMyBookings(res.data);
+        } else {
+          console.error(res);
+        }
+        this.state.myBookingsLoading = false;
+      });
+  }
+
+  getMyBookings() {
+    return this.state.myBookings;
+  }
+
+  setMyBookings(bookings) {
+    this.state.myBookings = bookings;
   }
 }
 export default new FlightStore();

@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 /* import routes */
 const auth = require('./routes/auth');
 const flights = require('./routes/flights');
+const bookings = require('./routes/bookings');
 
 // parse provided cookies
 app.use(cookieParser());
@@ -43,6 +44,7 @@ app.use(function(req, res, next) {
 // API routes
 app.use('/', auth);
 app.use('/', flights);
+app.use('/', bookings);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
