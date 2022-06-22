@@ -35,7 +35,7 @@ class LoginForm extends React.Component {
    * @returns {Promise<boolean>} True if login successful, false if login failed (for any reason)
    */
   async handleLogin(values) {
-    return new Promise((resolve) => axios.post(`${process.env.REACT_APP_API_URL}/login`, values, { withCredentials: true })
+    return new Promise((resolve) => axios.post(`/auth/login`, values, { withCredentials: true })
       .then((res) => {
         if(res.status === 200) {
           UserStore.setUser(res.data.user);

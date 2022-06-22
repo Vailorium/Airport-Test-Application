@@ -44,7 +44,7 @@ class FlightStore {
    */
   async loadAirports() {
     this.state.airportsLoading = true;
-    await axios.get(`${process.env.REACT_APP_API_URL}/airports`, { withCredentials: true })
+    await axios.get(`/flight/airports`, { withCredentials: true })
         .then((res) => {
           if(res.status === 200) {
             this.setAirports(res.data);
@@ -82,7 +82,7 @@ class FlightStore {
    */
   async loadAvailableFlights(from, to, start, end) {
     this.state.availableFlightsLoading = true;
-    await axios.get(`${process.env.REACT_APP_API_URL}/flights?from=${from}&to=${to}&start=${start.toJSON()}&end=${end.toJSON()}`, { withCredentials: true })
+    await axios.get(`/flight/flights?from=${from}&to=${to}&start=${start.toJSON()}&end=${end.toJSON()}`, { withCredentials: true })
       .then((res) => {
         if(res.status === 200) {
           this.setAvailableFlights(res.data);
@@ -103,7 +103,7 @@ class FlightStore {
 
   async loadMyBookings() {
     this.state.myBookingsLoading = true;
-    await axios.get(`${process.env.REACT_APP_API_URL}/bookings`, { withCredentials: true })
+    await axios.get(`/booking/bookings`, { withCredentials: true })
       .then((res) => {
         if(res.status === 200) {
           this.setMyBookings(res.data);

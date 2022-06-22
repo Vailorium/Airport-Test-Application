@@ -63,7 +63,7 @@ class MyBookings extends React.Component {
   async handleDeleteBookings() {
     for(let i = 0; i < this.state.selectedBookings.length; i++) {
       const bookingId = this.state.selectedBookings[i];
-      await axios.delete(`${process.env.REACT_APP_API_URL}/bookings/${bookingId}`, { withCredentials: true })
+      await axios.delete(`/booking/bookings/${bookingId}`, { withCredentials: true })
         .then((res) => {
           if(res.status !== 200) {
             console.error(res);

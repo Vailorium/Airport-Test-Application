@@ -34,7 +34,7 @@ class RegisterForm extends React.Component {
    * @returns {Promise<boolean>} True if registration successful, false if registration failed (for any reason)
    */
   async handleRegister(values) {
-    return new Promise((resolve) => axios.post(`${process.env.REACT_APP_API_URL}/register`, values, { withCredentials: true })
+    return new Promise((resolve) => axios.post(`/auth/register`, values, { withCredentials: true })
       .then((res) => {
         if(res.status === 200) {
           UserStore.setUser(res.data.user);
