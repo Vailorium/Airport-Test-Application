@@ -11,6 +11,7 @@ const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
  * @typedef UserProfile
  * @type {object}
  * @property {string} displayName
+ * @property {boolean} isAdmin
  */
 
 /**

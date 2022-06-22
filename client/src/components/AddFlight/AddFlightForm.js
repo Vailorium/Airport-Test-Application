@@ -55,6 +55,8 @@ class AddFlightForm extends React.Component {
           }
           for(let i = 0; i < values.routes.length; i++) {
             const route = values.routes[i];
+
+            // since date and time are entered separately, we need to combine them into one date-time
             const departureTime = new Date(`${route.departureDate} ${route.departureTime}`).toJSON();
             const arrivalTime = new Date(`${route.arrivalDate} ${route.arrivalTime}`).toJSON();
 

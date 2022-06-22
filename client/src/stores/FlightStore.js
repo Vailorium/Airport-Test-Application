@@ -6,6 +6,61 @@ const axios = require('axios').default;
  * @property {string} code 4 character code representing the airport
  * @property {string} name Name of airport
  */
+
+/**
+ * @typedef FlightRoute
+ * @type {object}
+ * @property {number} routeId
+ * @property {string} departureLocation
+ * @property {string} departureTime Date string
+ * @property {string} departureLocationFull
+ * @property {string} arrivalLocation
+ * @property {string} arrivalTime Date string
+ * @property {string} arrivalLocationFull
+ * @property {number} price
+ * @property {string} seats
+ */
+
+/**
+ * @typedef Flight
+ * @type {object}
+ * @property {number} flightId
+ * @property {string} planeName
+ * @property {number} planeCapacity
+ * @property {FlightRoute[]} routes
+ */
+
+/**
+ * @typedef BookingRoute
+ * @type {object}
+ * @property {number} routeId
+ * @property {string} departureLocation
+ * @property {string} departureTime Date string
+ * @property {string} departureLocationFull
+ * @property {string} arrivalLocation
+ * @property {string} arrivalTime Date string
+ * @property {string} arrivalLocationFull
+ * @property {number} price
+ * @property {number} bookingId
+ */
+
+/**
+ * @typedef Booking
+ * @type {object}
+ * @property {number} flightId
+ * @property {string} planeName
+ * @property {number} planeCapacity
+ * @property {BookingRoute[]} routes
+ */
+
+/**
+ * @typedef Plane
+ * @type {object}
+ * @property {number} id
+ * @property {string} name
+ * @property {number} seats Plane capacity
+ */
+
 class FlightStore {
   constructor() {
     this.state = {
@@ -56,6 +111,7 @@ class FlightStore {
         });
     this.state.airportsLoading = false;
   }
+
   /**
    * 
    * @returns {Airport[]}
@@ -76,7 +132,7 @@ class FlightStore {
   }
 
   /**
-   * 
+   * Load available flights into state based on parameters
    * @param {string} from 
    * @param {string} to 
    * @param {Date} start 
@@ -95,14 +151,25 @@ class FlightStore {
       });
   }
 
+  /**
+   * 
+   * @returns {Flight[]}
+   */
   getAvailableFlights() {
     return this.state.availableFlights;
   }
 
+  /**
+   * 
+   * @param {Flight[]} flights 
+   */
   async setAvailableFlights(flights) {
     this.state.availableFlights = flights;
   }
 
+  /**
+   * Loads user bookings to state
+   */
   async loadMyBookings() {
     this.state.myBookingsLoading = true;
     await axios.get(`/booking/bookings`, { withCredentials: true })
@@ -116,14 +183,25 @@ class FlightStore {
       });
   }
 
+  /**
+   * 
+   * @returns {Booking[]}
+   */
   getMyBookings() {
     return this.state.myBookings;
   }
 
+  /**
+   * 
+   * @param {Booking[]} bookings 
+   */
   setMyBookings(bookings) {
     this.state.myBookings = bookings;
   }
 
+  /**
+   * Load plane data into state
+   */
   async loadPlanes() {
     this.state.planesLoading = true;
     await axios.get('/flight/planes', { withCredentials: true })
@@ -137,10 +215,18 @@ class FlightStore {
       })
   }
 
+  /**
+   * 
+   * @returns {Plane[]}
+   */
   getPlanes() {
     return this.state.planes;
   }
 
+  /**
+   * 
+   * @param {Plane[]} planes 
+   */
   setPlanes(planes) {
     this.state.planes = planes;
   }

@@ -18,9 +18,9 @@ services:
     networks:
       - db
     volumes:
-      # - ./db/data:/var/lib/postgresql/data # comment out to run init script every time
+      - ./db/data:/var/lib/postgresql/data # comment out to run init script every time
       - ./db/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
-  # db_manager:
+  # db_manager: # only needed for pgadmin
   #   container_name: db_manager
   #   image: dpage/pgadmin4
   #   environment:

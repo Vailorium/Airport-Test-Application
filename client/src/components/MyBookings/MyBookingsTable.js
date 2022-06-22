@@ -33,6 +33,7 @@ class MyBookingsTable extends React.Component {
           {
             flights.length > 0 ? flights.map((f) => f.routes.map((r, i) => (
               <tr key={`booking-row-${r.bookingId}`}>
+                { /* only display these for the first row of a flight */ }
                 {i === 0 ? <td><Form.Check
                   id={`booking-row-${r.bookingId}-checkbox-all`}
                   type="checkbox"

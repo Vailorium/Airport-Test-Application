@@ -16,6 +16,9 @@ class UserStore {
     }
   }
 
+  /**
+   * Logs out user then refreshes page
+   */
   async logoutUser() {
     await axios.get(`/auth/logout`)
       .then((res) => {
@@ -33,7 +36,6 @@ class UserStore {
           if(res.status === 200 || res.status === 304) {
             this.setUser(res.data.user);
           } else {
-            // redirect to login
             console.error(res.data);
           }
         });

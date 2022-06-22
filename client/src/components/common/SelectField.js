@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 
+// custom styling and function over react-select element
 // designed to handle validation and match bootstrap (v5) form styles
 const SelectField = ({
   options,
