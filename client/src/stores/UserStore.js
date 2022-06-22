@@ -25,7 +25,7 @@ class UserStore {
   
   async preloadUser() {
     if(!this.state.user.displayName) {
-      await axios.get(`${process.env.REACT_APP_API_URL}/profile`, { withCredentials: true })
+      await axios.get(`/auth/profile`, { withCredentials: true })
         .then((res) => {
           console.log(res);
           if(res.status === 200 || res.status === 304) {

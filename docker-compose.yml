@@ -20,34 +20,33 @@ services:
     volumes:
       # - ./db/data:/var/lib/postgresql/data # comment out to run init script every time
       - ./db/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
-  db_manager:
-    container_name: db_manager
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@localhost.com}
-      PGADMIN_DEFAULT_USERNAME: ${PGADMIN_DEFAULT_USERNAME:-admin}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-    volumes:
-      - ./db/db_manager:/root/.pgadmin
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    depends_on:
-      - db
-    networks:
-      - db
-    restart: unless-stopped
+  # db_manager:
+  #   container_name: db_manager
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@localhost.com}
+  #     PGADMIN_DEFAULT_USERNAME: ${PGADMIN_DEFAULT_USERNAME:-admin}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+  #   volumes:
+  #     - ./db/db_manager:/root/.pgadmin
+  #   ports:
+  #     - "${PGADMIN_PORT:-5050}:80"
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - db
+  #   restart: unless-stopped
   server:
     build:
-      context: ./server
+      context: ./
       dockerfile: Dockerfile
     image: assignment-2-159-352-server
     container_name: assignment-2-159-352-node-server
     command: npm run start
     volumes:
-      - ./server/:/usr/src/app
-      - /usr/src/app/node_modules
+      - /usr/src/app/server/node_modules
     ports:
-      - "8080:8080"
+      - "5555:8000"
     env_file: ./server/.env
     environment:
       - NODE_ENV=development
@@ -55,25 +54,6 @@ services:
       - db
     networks:
       - db
-      - app-network
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    image: assignment-2-159-352-client
-    container_name: assignment-2-159-352-react-client
-    command: npm run start
-    volumes:
-      - ./client/:/usr/app
-      - /usr/app/node_modules
-    depends_on:
-      - server
-    ports:
-      - "3000:3000"
-    env_file: ./client/.env
-    environment:
-      - NODE_ENV=developmen
-    networks:
       - app-network
 
 networks:
