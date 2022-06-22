@@ -53,24 +53,4 @@ router.get('/flights', validator.query(flightsQuerySchema), async (req, res, nex
 
   res.status(200).send(flightsData);
 });
-const bookBodySchema = Joi.object({
-  routes: Joi.array().items(Joi.number()).required(),
-  count: Joi.number().required(),
-});
-router.post('/book', passport.authenticate('jwt', { session: false }), validator.body(bookBodySchema), async (req, res, next) => {
-  const { routes, count } = req.body;
-  const user = await req.user;
-  for(let route of routes) {
-    const availableSeats = await db.getRouteSeats(route);
-    if(availableSeats < count) {
-      res.status(400).send({message: 'Seats already booked'});
-      return;
-    }
-  }
-  for(let route of routes) {
-    console.log('booking');
-    db.bookRouteSeats(user.id, route, count);
-  }
-  res.status(200).send({message: 'Success'});
-});
 module.exports = router;

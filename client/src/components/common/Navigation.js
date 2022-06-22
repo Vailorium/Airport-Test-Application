@@ -36,7 +36,7 @@ function Navigation(props) {
                 // only display these options if the user is logged in
                 userProfile.displayName && (
                   <>
-                    <Nav.Link href="#">My Bookings</Nav.Link>
+                    <Nav.Link href="bookings">My Bookings</Nav.Link>
                     <Link to="flights" className='nav-link'>Available Flights</Link>
                   </>
                 )

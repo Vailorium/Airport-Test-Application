@@ -186,5 +186,44 @@ class DBRepository {
       }
     }
   }
+
+  async getUserBookings(userId) {
+    const query = `
+    SELECT
+      flights.id as flight_id, bookings.route_id, bookings.id as booking_id, planes.name, planes.seats, routes.departure_location, routes.departure_time,
+      routes.arrival_location, routes.arrival_time, routes.price,
+      departure_airport.name as departure_location_full, arrival_airport.name as arrival_location_full
+    FROM bookings
+    INNER JOIN
+      routes ON routes.id = bookings.route_id
+    INNER JOIN
+      flights ON flights.id = routes.flight_id
+    INNER JOIN
+      planes ON planes.id = flights.plane_id
+    INNER JOIN 
+      airports departure_airport ON departure_airport.code = routes.departure_location
+    INNER JOIN
+      airports arrival_airport ON arrival_airport.code = routes.arrival_location
+    WHERE user_id = $1
+    ORDER BY bookings.id
+    `;
+    let result;
+    try {
+      result = await this.pool.query(query, [userId]);
+    } catch(e) {
+      throw(e);
+    }
+    return result.rows;
+  }
+
+  async deleteUserBooking(userId, bookingId) {
+    let result;
+    try {
+      result = await this.pool.query('DELETE FROM bookings WHERE user_id=$1 AND id=$2 RETURNING id', [userId, bookingId]);
+    } catch(e) {
+      throw(e);
+    }
+    return result.rows.length > 0;
+  }
 }
 module.exports = new DBRepository();
